@@ -199,7 +199,7 @@
  *
  *  Enable: LV_USE_MATRIX
  */
-#define LV_USE_VECTOR_GRAPHIC 1
+#define LV_USE_VECTOR_GRAPHIC 0
 
 /** Enable API to take snapshot for object */
 #define LV_USE_SNAPSHOT 0
