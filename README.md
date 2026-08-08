@@ -1,189 +1,138 @@
-# VSCode Simulator project for LVGL
+# LVGL Dev Environment (WSL + VSCode)
 
-[LVGL](https://github.com/lvgl/lvgl) is written mainly for microcontrollers and embedded systems, however you can run the library **on your PC** as well without any embedded hardware. The code written on PC can be simply copied when your are using an embedded system.
+Windows上でLVGLのUI開発を行うための環境構築リポジトリです。
+[lv_port_pc_vscode](https://github.com/lvgl/lv_port_pc_vscode) をベースに、WSL2 + VSCode + CMakeでビルドできるようにしています。
 
-This project is pre-configured for VSCode and should work work on Windows, Linux and MacOs as well. FreeRTOS is also included and can be optionally enabled to better simulate embedded system's behavior. 
+---
 
-## Get started
+## 構成
 
-### Install SDL and the build tools
+| 項目 | 内容 |
+|---|---|
+| ホストOS | Windows 11 |
+| 開発環境 | WSL2 (Ubuntu) |
+| エディタ | VSCode + Remote-WSL |
+| ビルドシステム | CMake |
+| 表示 | SDL2(PCシミュレーター用) |
 
-- **Windows (vcpkg):** `vcpkg install sdl2`  (`vcpkg` can be installed from [https://github.com/microsoft/vcpkg](https://github.com/microsoft/vcpkg)) Also install either MinGW or another compiler and `cmake`.
-- **macOS (Homebrew):** `brew install sdl2 cmake make`  
-- **Linux:**  
-  - **Debian/Ubuntu:** `sudo apt install build-essential cmake libsdl2-dev`  
-  - **Arch:** `sudo pacman -S base-devel cmake sdl2`  
-  - **Fedora:** `sudo dnf install @development-tools cmake SDL2-devel`  
-- **Manual Installation of SDL:** Download from [SDL’s website](https://github.com/libsdl-org/SDL/releases) and place headers/libraries in your project.
-- **Verify Installation:** `sdl2-config --version`, `cmake --version`, `gcc --version`, `g++ --version` (should return the installed version).  
+---
 
-### Get the PC project
+## クローン方法
 
-Clone the PC project and the related sub modules:
-
-```bash
-git clone --recursive https://github.com/lvgl/lv_port_pc_vscode
-```
-
-## Usage
-
-### Visual Studio Code
-
-1. Be sure you have installed [SDL and the build tools](#install-sdl-and-the-build-tools)
-2. Open the project by double clicking on `simulator.code-workspace` or opening it with `File/Open Workspace from File`
-3. Install the recommended plugins
-4. Click the Run and Debug page on the left, and select `Debug LVGL demo with gdb` from the drop-down on the top. Like this:
-![image](https://github.com/lvgl/lv_port_pc_vscode/assets/7599318/f527b235-5718-4949-b5f0-bd807b3a64ba)
-5. Click the Play button or hit F5 to start debugging.
-
-#### ArchLinux User
-
-VSCode does not officially provide an installation package under Arch, you need to use the AUR manager `paru` to install it.
-The command is as follows:
+このプロジェクトは `lvgl` / `FreeRTOS` をGitサブモジュールとして参照しています。
+**必ず `--recurse-submodules` を付けてクローンしてください。**
 
 ```bash
-paru -S visual-studio-code-bin
+git clone --recurse-submodules <このリポジトリのURL>
 ```
 
-#### macOS
-
-Apple's default clang does not support the `-fsanitize=leak` flag.
-
-to build using the latest version of clang from homebrew, do the following:
-
-1. `brew install llvm`
-
-2. cmd+shift+p and run `Cmake: select a kit`, then `[Scan for kits]`
-
-3. then cmd+shift+p and run `Cmake: select a kit`, select the version of clang you just installed from homebrew (it should say `Using compilers C=/opt/homebrew/opt/llvm/bin/clang ...`)
-
-4. reconfigure by running cmd+shift+p `Cmake: Configure`
-
-5. build using [step 4 above](#visual-studio-code)
-
-### FreeRTOS configuration
-To correctly configure the project, the RTOS (Real-Time Operating System) requires a significant amount of heap memory, especially when debugging an SDL (Simple DirectMedia Layer) window application. In this project, the heap memory has been experimentally set to **512 MB**.
-
-```c
-#define configTOTAL_HEAP_SIZE ( ( size_t ) ( 512 * 1024 * 1024 ) )  // 512 MB Heap
-```
-This configuration ensures that the SDL window is displayed in a timely manner. If this value is reduced, it may cause significant delays in the SDL window's appearance. If the allocated heap memory is too small, the window may fail to appear altogether.
-Therefore, it is crucial to allocate sufficient heap memory to ensure smooth execution and debugging experience.
-
-### Enable FreeRTOS 
-To enable the rtos part of this project select in lv_conf.h `#define LV_USE_OS   LV_OS_NONE` to `#define LV_USE_OS  LV_OS_FREERTOS`
-Additionaly you have to enable the compilation of all FreeRTOS Files by turning on the `option(USE_FREERTOS "Enable FreeRTOS" OFF)` in the CMakeLists.txt file or
-by enabling the same flag from the command line when bootstrapping `cmake`:
+クローン後にサブモジュールが空だった場合は以下で取得できます。
 
 ```bash
-cmake -B build -DUSE_FREERTOS=ON
+git submodule update --init --recursive
 ```
 
-### CMake
+---
 
-This project uses CMake under the hood which can be used without Visula Studio Code too. Just type these in a Terminal when you are in the project's root folder:
+## セットアップ手順
+
+### 1. WSLのインストール
+
+Windows側で、PowerShellを**管理者として実行**し、以下を実行します。
+
+```powershell
+wsl --install
+```
+
+WSL2とUbuntuが導入されます。完了後、再起動が必要です。
+
+### 2. Ubuntuの初期設定
+
+再起動後、スタートメニューから「Ubuntu」を起動し、案内に従ってLinux用のユーザー名・パスワードを設定します。
+
+### 3. 必要パッケージのインストール
+
+WSL(Ubuntu)のターミナルで以下を実行します。
 
 ```bash
-mkdir build
-cd build
-cmake ..
-make -j
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y build-essential cmake git libsdl2-dev pkg-config
 ```
 
-## Run demos and examples
+| パッケージ | 役割 |
+|---|---|
+| build-essential | Cコンパイラ(gcc/g++)など基本ビルドツール |
+| cmake | ビルド設定を生成するツール |
+| git | ソース取得用 |
+| libsdl2-dev | PC上でLVGLの画面を表示するためのライブラリ |
+| pkg-config | ライブラリの場所をCMakeに伝える補助ツール |
 
-By default, the widgets demo (`lv_demo_widgets()`) will run. If you want to run a different demo or example from the LVGL library,
-simply replace the demo function call in the code with another one—such as `lv_demo_benchmark()` or `lv_example_label_1()`.
+### 4. VSCode拡張機能の導入(Windows側)
 
-```c
-int main(int argc, char **argv)
-{
-  /* ... */
-  /* Run the default demo */
-  /* To try a different demo or example, replace this with one of: */
-  /* - lv_demo_benchmark(); */
-  /* - lv_demo_stress(); */
-  /* - lv_example_label_1(); */
-  /* - etc. */
-  lv_demo_widgets(); 
+VSCodeの拡張機能タブから以下をインストールします。
 
-  while(1) {
-      /* ... */
-  }
-  return 0;
-}
-```
+- **WSL**(Microsoft製) — Remote-WSL接続用
+- **CMake Tools**(Microsoft製)
+- **C/C++**(Microsoft製)
 
-## Optional library
+### 5. プロジェクトを開く
 
-There are also FreeType and FFmpeg support. You can install these according to the followings:
-
-### Linux
+WSLのターミナルで作業ディレクトリに移動し(`~`配下推奨。`/mnt/c/...`はビルドが遅くなるため非推奨)、本リポジトリをクローンします。
 
 ```bash
-# FreeType support
-wget https://kumisystems.dl.sourceforge.net/project/freetype/freetype2/2.13.2/freetype-2.13.2.tar.xz
-tar -xf freetype-2.13.2.tar.xz
-cd freetype-2.13.2
-make
-make install
+cd ~
+git clone --recurse-submodules <このリポジトリのURL>
+cd <リポジトリ名>
+code .
 ```
 
-```bash
-# FFmpeg support
-git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
-cd ffmpeg
-git checkout release/6.0
-./configure --disable-all --disable-autodetect --disable-podpages --disable-asm --enable-avcodec --enable-avformat --enable-decoders --enable-encoders --enable-demuxers --enable-parsers --enable-protocol='file' --enable-swscale --enable-zlib
-make
-sudo make install
-```
-### (RT)OS support
-Works with any OS like pthred, Windows, FreeRTOS, etc. It has build in support for FreeRTOS. 
+VSCodeが起動し、左下に `WSL: Ubuntu` と表示されていれば接続成功です。
+初回は「Restricted Mode」の警告バナーが出るので、**Manage → Trust** で信頼してください。
 
-## Test
-This project is configured for [VSCode](https://code.visualstudio.com) and is tested on: 
-- Ubuntu Linux 
-- Windows WSL (Ubuntu Linux)
+`simulator.code-workspace` をダブルクリックして開くと、ビルド/デバッグ設定が読み込まれます。
 
-It requires a working version of GCC, GDB and make in your path.
-
-To allow debugging inside VSCode you will also require a GDB [extension](https://marketplace.visualstudio.com/items?itemName=webfreak.debug) or other suitable debugger. All the requirements, build and debug settings have been pre-configured in the [.workspace](simulator.code-workspace) file.
-
-The project can use **SDL** but it can be easily relaced by any other built-in LVGL dirvers.
-
-## Integration with LVGL Pro
-
-This project supports integration with LVGL Pro projects for UI development.
-
-### Setup
-
-1. Configure CMake with your LVGL Pro project folder:
+### 6. ビルド
 
 ```bash
-cmake -B build -DLVGL_PRO_PROJECT_DIR=<path-to-lvgl-pro-project>
-```
-
-Build your project:
-
-```bash
+cmake -B build -DCMAKE_SKIP_INSTALL_RULES=ON
 cmake --build build
 ```
 
-### Usage in Code
+> **`-DCMAKE_SKIP_INSTALL_RULES=ON` について**
+> LVGLのCMakeスクリプトに、`lv_conf.h` のパス解決に関する既知の不具合があり、
+> インストールルールの検証時に `INTERFACE_INCLUDE_DIRECTORIES ... which is prefixed in the source directory` というエラーで
+> configure/generateが失敗することがあります。シミュレーター用途ではインストール機能自体が不要なため、
+> このオプションでインストールルールの生成自体をスキップして回避しています。
 
-In your main.c, include the UI header from your LVGL Pro project and replace the default demo with your screen.
+### 7. 実行
 
-```c
-#include "ui.h"
-
-int main(void) {
-
-    /*Initialization code for LVGL*/
-    
-    /* Initialize the LVGL Pro UI */
-    ui_init("<path-to-lvgl-pro-project>");
-    
-    /* ... rest of your application ...*/
-}
+```bash
+./bin/main
 ```
+
+WSLg機能により、追加設定なしでWindows上にLVGLのデモウィンドウが表示されます。
+
+---
+
+## つまずきポイントと対処
+
+### `lvgl` ディレクトリに `CMakeLists.txt` がないと言われる
+
+サブモジュールが未取得です。以下を実行してください。
+
+```bash
+git submodule update --init --recursive
+```
+
+### `CMake Generate step failed`(INTERFACE_INCLUDE_DIRECTORIES 関連)
+
+上述の「ビルド」手順の通り、`-DCMAKE_SKIP_INSTALL_RULES=ON` を付けてconfigureし直してください。
+
+### `#error "LV_USE_VECTOR_GRAPHIC requires ..."`
+
+`lv_conf.h` で `LV_USE_VECTOR_GRAPHIC` が `1` になっているのに、対応する描画エンジン(`LV_USE_THORVG`など)が `0` のままだと発生します。
+
+`lv_conf.h` を編集し、いずれかで解消してください。
+
+- ベクターグラフィックが不要なら `LV_USE_VECTOR_GRAPHIC` を `0` に変更(このリポジトリではこちらを採用)
+- ベクターグラフィックを使いたいなら `LV_USE_THORVG` を `1` に変更
