@@ -12,6 +12,63 @@
         "height": "80"
       },
       "position": {
+        "align": "LV_ALIGN_TOP_MID",
+        "offsetX": 0,
+        "offsetY": "90"
+      },
+      "baseStyle": {
+        "radius": "12",
+        "backgroundColor": "#1F1F1F",
+        "borderWidth": "2",
+        "borderColor": "#FFFFFF",
+        "padding": "6"
+      },
+      "focusedStyle": {
+        "outlineWidth": "6",
+        "outlineColor": "#FFD400",
+        "outlinePadding": "2",
+        "borderWidth": "6",
+        "borderColor": "#FFD400",
+        "outlineOpacity": "LV_OPA_COVER"
+      },
+      "focusStates": [
+        "LV_STATE_FOCUSED",
+        "LV_STATE_FOCUS_KEY"
+      ]
+    },
+    "interaction": {
+      "registeredEvent": {
+        "api": "lv_obj_add_event_cb",
+        "callback": "xxx",
+        "event": "LV_EVENT_CLICKED"
+      }
+    },
+    "focus": {
+      "group": "default",
+      "focusable": true,
+      "initialFocus": true,
+      "tabOrder": 1
+    },
+    "runtimeAction": {
+      "simulator": {
+        "beginSequence": "xxx",
+        "request": "xxx"
+      }
+    }
+  },
+  "nextButton": {
+    "appearance": {
+      "text": {
+        "label": "Next",
+        "font": "lv_font_montserrat_36",
+        "color": "#FFFFFF",
+        "alignment": "center"
+      },
+      "size": {
+        "width": "220",
+        "height": "80"
+      },
+      "position": {
         "align": "LV_ALIGN_BOTTOM_MID",
         "offsetX": 0,
         "offsetY": "-30"
@@ -43,11 +100,30 @@
         "event": "LV_EVENT_CLICKED"
       }
     },
+    "focus": {
+      "group": "default",
+      "focusable": true,
+      "initialFocus": false,
+      "tabOrder": 2
+    },
     "runtimeAction": {
       "simulator": {
         "beginSequence": "xxx",
         "request": "xxx"
-      },
+      }
+    }
+  },
+  "focusNavigation": {
+    "group": "default",
+    "initialFocusedObject": "fullPressButton",
+    "navigation": {
+      "next": "nextButton",
+      "previous": "fullPressButton",
+      "keyBindings": {
+        "tab": "next",
+        "shiftTab": "previous",
+        "enter": "activate"
+      }
     }
   }
 }
