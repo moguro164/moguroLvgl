@@ -82,6 +82,12 @@
 - `offsetY`: 配置
   - 下向きが+
 
+#### baseStyle
+- ウィジェットの見た目
+- `backgroundColor`: 背景色
+- `borderColor`, `borderWidth`, `radius`: 枠線・角丸
+- `padding`: 内側余白
+
 
 ## labels
 
@@ -93,12 +99,6 @@
 
 ### appearance
 ボタンの見た目に関する設定をまとめます。共通の appearance ルールに加えて、通常状態・フォーカス状態ごとの見た目を分けて定義できます。
-
-#### baseStyle
-- 通常状態のボタン見た目
-- `backgroundColor`: 背景色
-- `borderColor`, `borderWidth`, `radius`: 枠線・角丸
-- `padding`: 内側余白
 
 #### focusedStyle
 - フォーカス時に適用する見た目

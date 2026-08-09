@@ -4,8 +4,8 @@
       "appearance": {
         "text": {
           "label": "LVGL Button Demo",
-          "font": "lv_font_montserrat_24",
-          "color": "#FFFFFF",
+          "font": "lv_font_montserrat_48",
+          "color": "#a83232",
           "alignment": "center"
         },
         "size": {
@@ -16,6 +16,13 @@
           "align": "LV_ALIGN_TOP_MID",
           "offsetX": 0,
           "offsetY": "30"
+        },
+        "baseStyle": {
+          "radius": "12",
+          "backgroundColor": "#FFFFFF",
+          "borderWidth": "2",
+          "borderColor": "#000000",
+          "padding": "6"
         }
       }
     },
@@ -24,7 +31,7 @@
         "text": {
           "label": "Press a button",
           "font": "lv_font_montserrat_18",
-          "color": "#FFD400",
+          "color": "#000000",
           "alignment": "center"
         },
         "size": {
@@ -35,6 +42,13 @@
           "align": "LV_ALIGN_CENTER",
           "offsetX": 0,
           "offsetY": "40"
+        },
+        "baseStyle": {
+          "radius": "12",
+          "backgroundColor": "#FFFFFF",
+          "borderWidth": "2",
+          "borderColor": "#000000",
+          "padding": "6"
         }
       }
     }
@@ -115,12 +129,8 @@
           "padding": "6"
         },
         "focusedStyle": {
-          "outlineWidth": "6",
-          "outlineColor": "#FFD400",
-          "outlinePadding": "2",
           "borderWidth": "6",
-          "borderColor": "#FFD400",
-          "outlineOpacity": "LV_OPA_COVER"
+          "borderColor": "#FFD400"
         },
         "focusStates": [
           "LV_STATE_FOCUSED",
