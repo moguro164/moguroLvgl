@@ -65,21 +65,15 @@
           "padding": "6"
         },
         "focusedStyle": {
-          "outlineWidth": "6",
-          "outlineColor": "#FFD400",
-          "outlinePadding": "2",
           "borderWidth": "6",
-          "borderColor": "#FFD400",
-          "outlineOpacity": "LV_OPA_COVER"
+          "borderColor": "#FFD400"
         },
         "focusStates": [
-          "LV_STATE_FOCUSED",
-          "LV_STATE_FOCUS_KEY"
+          "LV_STATE_FOCUSED"
         ]
       },
       "interaction": {
         "registeredEvent": {
-          "api": "lv_obj_add_event_cb",
           "callback": "xxx",
           "event": "LV_EVENT_CLICKED"
         }
@@ -87,8 +81,7 @@
       "focus": {
         "group": "default",
         "focusable": true,
-        "initialFocus": true,
-        "tabOrder": 1
+        "initialFocus": true
       },
       "runtimeAction": {
         "simulator": {
@@ -145,7 +138,6 @@
         "group": "default",
         "focusable": true,
         "initialFocus": false,
-        "tabOrder": 2
       },
       "runtimeAction": {
         "simulator": {
