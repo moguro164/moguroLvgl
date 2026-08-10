@@ -8,6 +8,7 @@ set(LVGL_PRO_PROJECT_DIR
 # Main include files of the project
 include_directories(${PROJECT_SOURCE_DIR}/main/inc)
 include_directories(${PROJECT_SOURCE_DIR}/src/screens/home_screen)
+include_directories(${PROJECT_SOURCE_DIR}/src/screens/setting_screen)
 
 # Define options for LVGL with default values (OFF)
 option(LV_USE_DRAW_SDL "Use SDL draw unit" OFF)
@@ -43,7 +44,8 @@ set(MAIN_SOURCES
     src/mouse_cursor_icon.c
     src/hal/hal.c
     src/screen_manager.c
-    src/screens/home_screen/home_screen.c)
+    src/screens/home_screen/home_screen.c
+    src/screens/setting_screen/setting_screen.c)
 set(MAIN_LIBS lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES})
 
 if(NOT MSVC)

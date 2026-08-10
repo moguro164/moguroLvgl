@@ -1,5 +1,4 @@
-#include "home_screen.h"
-#include "src/screen_manager.h"
+#include "setting_screen.h"
 
 #include <stdio.h>
 
@@ -11,7 +10,6 @@ static void fullpress_btn_event_cb(lv_event_t *e)
     lv_obj_t *label = lv_obj_get_child(btn, 0);
     const char *text = label != NULL ? lv_label_get_text(label) : "button";
     printf("%s button clicked\n", text);
-    navigate_to(SCR_SETTINGS, LV_SCR_LOAD_ANIM_MOVE_LEFT);
   }
 }
 
@@ -52,7 +50,7 @@ static lv_obj_t *create_button(lv_obj_t *parent, const char *text, int width, in
   return btn;
 }
 
-lv_obj_t *create_home_screen(void)
+lv_obj_t *create_setting_screen(void)
 {
   lv_obj_t *screen = lv_obj_create(NULL);
   lv_obj_t *title;
@@ -64,25 +62,17 @@ lv_obj_t *create_home_screen(void)
   title = create_label(screen, "LVGL Button Demo", 240, 40, LV_ALIGN_TOP_MID, 0, 30, &lv_font_montserrat_48, lv_color_hex(0xA83232));
   (void)title;
 
-  status = create_label(screen, "Press a button", 220, 30, LV_ALIGN_CENTER, 0, 40, &lv_font_montserrat_18, lv_color_hex(0xFFD400));
-  (void)status;
-
   group = lv_group_get_default();
   if(group == NULL) {
     group = lv_group_create();
     lv_group_set_default(group);
   }
 
-  btn1 = create_button(screen, "FullPress", 220, 80, LV_ALIGN_TOP_MID, 0, 90);
+  btn1 = create_button(screen, "back", 220, 80, LV_ALIGN_TOP_MID, 0, 90);
   lv_obj_add_event_cb(btn1, fullpress_btn_event_cb, LV_EVENT_CLICKED, NULL);
   lv_obj_add_event_cb(btn1, fullpress_btn_event_cb, LV_EVENT_SHORT_CLICKED, NULL);
 
-  btn2 = create_button(screen, "Next", 220, 80, LV_ALIGN_BOTTOM_MID, 0, -30);
-  lv_obj_add_event_cb(btn2, fullpress_btn_event_cb, LV_EVENT_CLICKED, NULL);
-  lv_obj_add_event_cb(btn2, fullpress_btn_event_cb, LV_EVENT_SHORT_CLICKED, NULL);
-
   lv_group_add_obj(group, btn1);
-  lv_group_add_obj(group, btn2);
   lv_group_focus_obj(btn1);
 
   return screen;

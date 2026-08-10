@@ -1,5 +1,6 @@
 #include "screen_manager.h"
 #include "home_screen.h"
+#include "setting_screen.h"
 
 typedef lv_obj_t* (*screen_create_fn_t)(void);
 
@@ -11,9 +12,7 @@ typedef struct {
 
 static screen_entry_t g_screens[SCR_COUNT] = {
     [SCR_HOME]     = { create_home_screen,     true,  NULL },
-    [SCR_MAIN]     = { create_main_screen,     true,  NULL },
-    [SCR_SETTINGS] = { create_settings_screen, false, NULL },
-    [SCR_DETAIL]   = { create_detail_screen,   false, NULL },
+    [SCR_SETTINGS] = { create_setting_screen,  true,  NULL },
 };
 
 void navigate_to(screen_id_t id, lv_scr_load_anim_t anim) {
