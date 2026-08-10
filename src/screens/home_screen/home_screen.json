@@ -4,7 +4,7 @@
       "appearance": {
         "text": {
           "label": "LVGL Button Demo",
-          "font": "lv_font_montserrat_48",
+          "font": "lv_font_montserrat_30",
           "color": "#a83232",
           "alignment": "center"
         },

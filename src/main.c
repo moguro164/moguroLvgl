@@ -25,6 +25,7 @@
 #include <SDL.h>
 
 #include "hal/hal.h"
+#include "screen_manager.h"
 
 /*********************
  *      DEFINES
@@ -37,7 +38,6 @@
 /**********************
  *  STATIC PROTOTYPES
  **********************/
-
 /**********************
  *  STATIC VARIABLES
  **********************/
@@ -49,7 +49,6 @@
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
-
 #if LV_USE_OS != LV_OS_FREERTOS
 
 int main(int argc, char **argv)
@@ -61,7 +60,8 @@ int main(int argc, char **argv)
   lv_init();
 
   /*Initialize the HAL (display, input devices, tick) for LVGL*/
-  sdl_hal_init(320, 480);
+  sdl_hal_init(1000, 1000);
+  screen_manager_init();
 
   while(1) {
     /* Periodically call the lv_task handler.

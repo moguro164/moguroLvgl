@@ -7,6 +7,7 @@ set(LVGL_PRO_PROJECT_DIR
 
 # Main include files of the project
 include_directories(${PROJECT_SOURCE_DIR}/main/inc)
+include_directories(${PROJECT_SOURCE_DIR}/src/screens/home_screen)
 
 # Define options for LVGL with default values (OFF)
 option(LV_USE_DRAW_SDL "Use SDL draw unit" OFF)
@@ -37,7 +38,12 @@ add_compile_definitions($<$<BOOL:${LV_USE_FFMPEG}>:LV_USE_FFMPEG=1>)
 add_subdirectory(lvgl)
 target_include_directories(lvgl PUBLIC ${PROJECT_SOURCE_DIR} ${SDL2_INCLUDE_DIRS})
 
-set(MAIN_SOURCES src/main.c src/mouse_cursor_icon.c src/hal/hal.c)
+set(MAIN_SOURCES
+    src/main.c
+    src/mouse_cursor_icon.c
+    src/hal/hal.c
+    src/screen_manager.c
+    src/screens/home_screen/home_screen.c)
 set(MAIN_LIBS lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES})
 
 if(NOT MSVC)
